@@ -5,7 +5,8 @@ import networkx as nx
 from lxml import etree
 from copy import deepcopy
 
-filename = 'hiroshima.osm'
+# filename = 'hiroshima.osm'
+filename = "small_toyota.osm"
 tree = etree.parse(filename)
 G = nx.DiGraph()
 

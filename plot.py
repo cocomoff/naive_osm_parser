@@ -6,8 +6,21 @@ import matplotlib.pyplot as plt
 
 
 G = pickle.load(open("GG.pickle", "rb"))
+print("before processing")
 print(G.number_of_nodes())
 print(G.number_of_edges())
+
+
+G = G.to_undirected()
+CG = nx.connected_components(G)
+print()
+print("connected components")
+for c in sorted(CG, key=len, reverse=True):
+  print(len(c))
+
+largest_cc = max(nx.connected_components(G), key=len)
+G = G.subgraph(largest_cc)
+
 
 pos = {}
 for n, data in G.nodes(data=True):
