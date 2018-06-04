@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pickle
+import numpy as np
 import networkx as nx
 from collections import defaultdict
 import mpu
@@ -20,8 +21,11 @@ def latlon2dist(latlon1, latlon2):
 
 if __name__ == '__main__':
   G = pickle.load(open("GG.pickle", "rb"))
-  print(G.number_of_nodes())
-  print(G.number_of_edges())
+  nV = G.number_of_nodes()
+  nE = G.number_of_edges()
+  print(nV)
+  print(nE)
+  A = np.zeros((nV, nV))
 
   # V -> {0, |V|}
   vdict = {}
@@ -35,7 +39,12 @@ if __name__ == '__main__':
       f.write("{}\t{}\n".format(n, vdict[n]))
 
   # E -> file
+  for idx, (u, v, data) in enumerate(G.edges(data=True)):
+    d = mpu.haversine_distance(vtoxy[u], vtoxy[v]) * 1000
+    A[vdict[u], vdict[v]] = d
+    
   with open('edges.csv', 'w') as f:
-    for idx, (u, v, data) in enumerate(G.edges(data=True)):
-      d = mpu.haversine_distance(vtoxy[u], vtoxy[v]) * 1000
-      f.write("{}\t{}\t{}\n".format(vdict[u], vdict[v], d))
+    for i in range(nV):
+      for j in range(i, nV):
+        if A[i, j] > 0 or A[i, j] < 0:
+          f.write("{}\t{}\t{}\n".format(i, j, A[i, j]))
