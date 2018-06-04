@@ -17,7 +17,7 @@ typedef boost::adjacency_list<boost::listS, boost::vecS, boost::undirectedS,
                               > Graph;
 typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
 typedef std::pair<int, int> Edge;
-const int N = 5574;
+const int N = 7; // 5574;
 
 int main() {
   // info
@@ -25,7 +25,7 @@ int main() {
   vector<int> weights;
 
   // read from file
-  ifstream ifs("edges.csv");
+  ifstream ifs("small_edges.csv");
   std::string line;
   while (ifs && getline(ifs, line)) {
     int u, v;
@@ -49,18 +49,14 @@ int main() {
   johnson_all_pairs_shortest_paths(g, D, boost::distance_map(&d[0]));
 
   // output
-  for (int k = 0; k < N; k++) {
-    std::cout << std::setw(5) << k;
-    std::cout << std::endl;
-    for (int i = 0; i < N; ++i) {
-      std::cout << std::setw(3) << i << " -> ";
-      for (int j = 0; j < N; ++j) {
-        if (D[i][j] == (std::numeric_limits<int>::max)())
-          std::cout << std::setw(5) << "inf";
-        else
-          std::cout << std::setw(5) << D[i][j];
-      }
-      std::cout << std::endl;
+  for (int i = 0; i < N; ++i) {
+    std::cout << std::setw(3) << i << " -> ";
+    for (int j = 0; j < N; ++j) {
+      if (D[i][j] == (std::numeric_limits<int>::max)())
+        std::cout << std::setw(5) << "inf";
+      else
+        std::cout << std::setw(5) << D[i][j];
     }
+    std::cout << std::endl;
   }
 }
